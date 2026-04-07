@@ -1,42 +1,48 @@
 ---
-name: matverse-blackstart
-description: Automação para institucionalização científica e bootstrap de organismos digitais MatVerse. Use para publicar papers no Zenodo com DOI, organizar datasets no Hugging Face e executar o bootstrap de infraestruturas soberanas (Atlas, Runtime, Twin).
+name: canonical-registry
+description: "Automates the triple canonical registration process (SHA-256 hash on Sepolia blockchain, paper/archive on Zenodo DOI, and dataset/proof space on Hugging Face). Use for anchoring project integrity, scientific publication, and public proof of existence."
 ---
 
-# MatVerse Blackstart Skill
+# Canonical Registry
 
-Esta Skill automatiza o processo de transição de arquiteturas conceituais para objetos científicos operacionais e institucionalizados.
+This skill automates the anchoring of digital artifacts across three sovereign layers: Blockchain (Immutability), Science (Persistence), and Public Data (Accessibility).
 
-## Workflows Principais
+## Workflow
 
-### 1. Institucionalização Epistemológica (Zenodo)
-- **Objetivo**: Obter DOIs permanentes para papers e artefatos.
-- **Ação**: Use o script `scripts/zenodo_publish.py` para automatizar o upload de tarballs LaTeX/PDF.
-- **Regra**: Sempre inclua o ORCID do autor e a afiliação "MatVerse Institute".
+### 1. Artifact Preparation
+- Collect all project files into a directory.
+- Generate a PDF of the paper/documentation.
+- Create a `.tar.gz` archive of the core files.
+- Calculate the SHA-256 hash of the archive.
 
-### 2. Organização do MatverseHub (Hugging Face)
-- **Objetivo**: Centralizar datasets, modelos e documentação estratégica.
-- **Ação**: Criar repositórios do tipo `dataset` para o Observatório Científico.
-- **Arquivos Essenciais**: `MANIFESTO_DOIS.md`, `TEORIA_GERAL_UNIFICADA.md`, `SOVEREIGN_BOOTSTRAP_KIT.zip`.
+### 2. Zenodo Registration (Scientific Anchor)
+- Use `scripts/zenodo_upload.py` to upload the PDF and archive.
+- Requires `ZENODO_ACCESS_TOKEN`.
+- Output: DOI (Digital Object Identifier).
 
-### 3. Bootstrap do Organismo (Blackstart)
-- **Objetivo**: Ativar a infraestrutura viva do MatVerse.
-- **Ação**: Executar `scripts/bootstrap_organism.sh`.
-- **Componentes**:
-    - **Atlas**: Constituição selada com Merkle Root.
-    - **Runtime**: Motor de execução com protocolo PBSE (PASS/BLOCK/SILENCE/ESCALATE).
-    - **Twin**: Gêmeo digital espelhado para simulação e replay.
+### 3. Hugging Face Publication (Public Proof)
+- Use `scripts/hf_upload.py` to create a dataset and a Gradio proof space.
+- Requires `HUGGINGFACE_TOKEN` and `HF_USER`.
+- Includes the Zenodo DOI and Sepolia Hash in the public space.
 
-## Modelo de 3 Corpos (Invariantes)
-Ao operar o organismo, siga rigorosamente a separação ontológica:
-1. **Organismo**: Validação constitucional (Ψ ≥ 0.72).
-2. **Cognição**: Geração de hipóteses (sem identidade "eu sou").
-3. **Automação**: Registro de evidências e medição de falhas (α > 1).
+### 4. Sepolia Registration (On-chain Anchor)
+- Use `scripts/sepolia_register.py` to anchor the hash in the blockchain.
+- Requires `SEPOLIA_PRIVATE_KEY`.
+- Output: Transaction ID (TX).
 
-## Recursos Bundled
-- `scripts/bootstrap_organism.sh`: Script de criação de diretórios e invariantes base.
-- `references/general_theory_template.md`: Template para o Paper de Unificação.
-- `scripts/zenodo_publish.py`: Utilitário para integração com API Zenodo.
+## Bundled Scripts
 
----
-**Status**: Operacional - Nível de Soberania Digital: Blackstart.
+- `scripts/zenodo_upload.py`: Handles deposition creation, file upload, and publication.
+- `scripts/hf_upload.py`: Automates dataset creation and space deployment.
+- `scripts/sepolia_register.py`: Signs and sends a transaction with the hash in the data field.
+
+## Requirements
+
+- **Zenodo**: API Token (Write permission).
+- **Hugging Face**: Access Token (Write permission).
+- **Sepolia**: Private Key with small amount of Sepolia ETH for gas.
+
+## Best Practices
+- Always calculate the hash *before* any upload to ensure the version is locked.
+- Use the Gradio SDK for proof spaces for maximum compatibility.
+- Store all registration links (DOI, TX, HF URL) in a final consolidated report.

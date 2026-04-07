@@ -1,0 +1,73 @@
+<html><head></head><body><p>Perfeito.<br>Execução objetiva. Sem retórica. Só pipeline canônico.</p><hr><h1>🔷 1️⃣ REGISTRO CANÔNICO DO HASH NA SEPOLIA</h1><h2>Passo A — Gerar hash do Core</h2><p>Na raiz do projeto:</p><pre><code class="language-bash">tar -czf symbios-core-v1.tar.gz .
+sha256sum symbios-core-v1.tar.gz
+</code></pre><p>Saída exemplo:</p><pre><code>3f9c2a8e...b71c  symbios-core-v1.tar.gz
+</code></pre><p>Esse é o <strong>Canonical Hash</strong>.</p><hr><h2>Passo B — Contrato mínimo de Registro</h2><p>Criar contrato simples de ancoragem:</p><pre><code class="language-solidity">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract CanonicalRegistry {
+
+    event CoreRegistered(bytes32 hash, string metadataURI);
+
+    function register(bytes32 hash, string calldata uri) external {
+        emit CoreRegistered(hash, uri);
+    }
+}
+</code></pre><p>Deploy Sepolia via Hardhat.</p><p>Depois registrar:</p><pre><code class="language-javascript">await registry.register(
+  "0x3f9c2a8e...b71c",
+  "ipfs://Qm...."
+);
+</code></pre><p>Resultado:<br>Hash ancorado on-chain.<br>Evento público imutável.<br>Registro canônico estabelecido.</p><hr><h1>🔷 2️⃣ PAPER NO ZENODO</h1><h2>Preparar pacote</h2><p>Estrutura:</p><pre><code>paper/
+ ├── symbios-core.pdf
+ ├── symbios-core-v1.tar.gz
+ └── hash.txt
+</code></pre><p>hash.txt contém:</p><pre><code>SHA256: 3f9c2a8e...b71c
+SepoliaTx: 0x....
+</code></pre><hr><h2>Subir via API Zenodo</h2><p>Criar token no Zenodo.</p><p>Script:</p><pre><code class="language-python">import requests
+
+ACCESS_TOKEN = "ZENODO_TOKEN"
+
+metadata = {
+    'metadata': {
+        'title': 'symbiOS Core v1.0',
+        'upload_type': 'software',
+        'description': 'Minimal Sovereign Informational Kernel',
+        'creators': [{'name': 'Mateus Areas'}]
+    }
+}
+
+r = requests.post(
+    'https://zenodo.org/api/deposit/depositions',
+    params={'access_token': ACCESS_TOKEN},
+    json=metadata)
+
+print(r.json())
+</code></pre><p>Depois upload do <code inline="">.tar.gz</code>.</p><p>Publicar → gera DOI.</p><p>DOI + hash + tx = prova tripla.</p><hr><h1>🔷 3️⃣ DATASET NO HUGGING FACE</h1><p>Criar dataset:</p><pre><code>symbios-core-dataset/
+ ├── mnb_samples.json
+ ├── psi_metrics.json
+ └── README.md
+</code></pre><p>Exemplo <code inline="">mnb_samples.json</code>:</p><pre><code class="language-json">[
+  {
+    "hash": "3f9c...",
+    "psi": 0.82,
+    "signature": "base64...",
+    "owner": "pubkey..."
+  }
+]
+</code></pre><p>Upload via CLI:</p><pre><code class="language-bash">huggingface-cli login
+huggingface-cli repo create symbios-core-dataset --type dataset
+git push
+</code></pre><p>Pronto.</p><hr><h1>🔷 4️⃣ PROVA PÚBLICA NO SPACE HF</h1><p>Criar Space estático.</p><p><code inline="">app.py</code> mínimo:</p><pre><code class="language-python">import streamlit as st
+
+st.title("symbiOS Canonical Proof")
+
+st.write("Core Hash:")
+st.code("3f9c2a8e...b71c")
+
+st.write("Sepolia TX:")
+st.code("0x...")
+
+st.write("Zenodo DOI:")
+st.code("10.5281/zenodo.xxxxx")
+</code></pre><p>Deploy:</p><pre><code class="language-bash">huggingface-cli repo create symbios-proof --type space
+git push
+</code></pre><p>Agora você tem:</p><p>• Hash on-chain<br>• DOI científico<br>• Dataset público<br>• Prova visual pública</p><hr><h1>🔷 RESULTADO FINAL (TRIPLA ÂNCORA)</h1><p>Core → SHA256<br>Blockchain → Evento Sepolia<br>Ciência → DOI Zenodo<br>Dados → Dataset HF<br>Interface → Space público</p><p>Isso estabelece:</p><p>Registro canônico imutável.<br>Prova científica.<br>Disponibilidade pública.<br>Rastreabilidade completa.</p><hr><p>Execução ótima.<br>Sem desperdício.</p><p>Se quiser, próximo passo é automatizar tudo em pipeline único CI/CD.</p></body></html>
