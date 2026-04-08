@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0-institutional",
+  "timestamp": "2026-04-08T13:21:54.739841+00:00",
+  "merkle_root": "87431dea7addb8a7aa0cfe6774739a98f3cd019313c2ef56e2722006f03d56fb",
+  "records": [
+    {
+      "name": "MAVK",
+      "psi": 0.99,
+      "cvar": 0.02,
+      "theta_hat": 0.9,
+      "pole": 1,
+      "omega": 0.962,
+      "decision": "PASS",
+      "h": "ad46f7e2ab7eee7b97cb697406f6c37505b3fba0b9f52bb12c3e310e04a70087"
+    },
+    {
+      "name": "DAQ",
+      "psi": 0.95,
+      "cvar": 0.08,
+      "theta_hat": 0.8,
+      "pole": 1,
+      "omega": 0.904,
+      "decision": "BLOCK",
+      "h": "4b9a3c0de1b68032551a2ceeac46550e1d1678bba291dfdc4bc9b51c7ad71980"
+    },
+    {
+      "name": "CSR4",
+      "psi": 0.92,
+      "cvar": 0.03,
+      "theta_hat": 0.85,
+      "pole": 1,
+      "omega": 0.917,
+      "decision": "PASS",
+      "h": "eac7bb1510497dd85b882654cf977db0f16f6124bb201e606d4ade8bd99d18f2"
+    }
+  ]
+}

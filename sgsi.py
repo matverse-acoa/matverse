@@ -1,3 +1,4 @@
+'''
 import json
 import math
 import time
@@ -24,7 +25,7 @@ class AlgorithmBody:
 
     def compute_cvar(self, losses: List[float], alpha: float = 0.95) -> float:
         if not losses:
-            return 1.0
+            return 0.0  # CVaR é 0 se não há perdas
         xs = sorted(losses)
         idx = max(0, math.ceil(alpha * len(xs)) - 1)
         var = xs[idx]
@@ -38,22 +39,27 @@ class AlgorithmBody:
         psi = float(payload.get("psi", max(0.0, min(1.0, 1.0 - (sum(losses) / max(len(losses), 1))))))
         theta = float(payload.get("theta", 1.0 / (1.0 + float(payload.get("latency_ms", 0.0)) / 1000.0)))
         cvar = self.compute_cvar(losses)
-        omega = 0.4 * psi + 0.3 * theta + 0.2 * (1.0 - cvar) + 0.1 * float(payload.get("pole", 1.0))
+        
+        # Ω-Gate Canônico v2
+        pole = float(payload.get("pole", 1.0))
+        omega = 0.4 * psi + 0.3 * theta + 0.2 * (1.0 - cvar) + 0.1 * pole
 
         return Metrics(psi=psi, theta=theta, omega=omega, cvar=cvar)
 
 
 class GovernanceBody:
     """
-    Corpo G: decide admissibilidade.
+    Corpo G: decide admissibilidade (Canônico v2).
     """
 
     def decide(self, metrics: Metrics) -> Decision:
+        if metrics.psi < 0.85:
+            return Decision.BLOCK
         if metrics.cvar > 0.05:
             return Decision.BLOCK
-        if metrics.psi >= 0.85 and metrics.omega >= 0.85:
+        if metrics.omega >= 0.85:
             return Decision.PASS
-        return Decision.ESCALATE
+        return Decision.CONDITIONAL
 
 
 class SkillBody:
@@ -69,11 +75,16 @@ class SkillBody:
             "stimulus": payload.get("stimulus"),
             "context": payload.get("context", {}),
         }
+        
+        # Adiciona hash ao evento para o Merkle Root v2
+        event_raw = json.dumps(event, sort_keys=True, ensure_ascii=False).encode('utf-8')
+        event["h"] = hashlib.sha256(event_raw).hexdigest()
+        
         state.memory.append(event)
 
         if decision == Decision.PASS:
             state.organism_state["mode"] = "active"
-        elif decision == Decision.ESCALATE:
+        elif decision == Decision.ESCALATE or decision == Decision.CONDITIONAL:
             state.organism_state["mode"] = "review"
         else:
             state.organism_state["mode"] = "containment"
@@ -100,7 +111,7 @@ class SGSI:
 
         phi_encarnado = PhiEncarnado(
             chain_receipt=bool(payload.get("chain_receipt", False)),
-            replay=bool(payload.get("replay_ok", False)), # Renamed for consistency
+            replay=bool(payload.get("replay_ok", False)), 
             publication=bool(payload.get("publication_ok", False)),
             realtime=bool(payload.get("realtime", False)),
             metrics_consistency=bool(payload.get("metrics_consistency", False)),
@@ -123,10 +134,7 @@ class SGSI:
                 metrics.psi >= 0.85
                 and metrics.cvar <= 0.05
                 and metrics.omega >= 0.85
-                and proof.phi_encarnado.replay
-                and proof.phi_encarnado.chain_receipt
-                and proof.phi_encarnado.publication
-                and proof.phi_encarnado.realtime
-                and proof.phi_encarnado.metrics_consistency
+                and all(asdict(phi_encarnado).values())
             ),
         }
+'''
