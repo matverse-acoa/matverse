@@ -1,0 +1,31 @@
+{
+  "dataset_class": "SYNTHETIC_FIXTURE",
+  "source": {
+    "description": "Synthetic values retained from the 2026-04-08 local demonstration.",
+    "external_validity": "NOT_ESTABLISHED",
+    "claim_policy": "MATVERSE_FINAL_REPORT.md#correção-epistemológica"
+  },
+  "records": [
+    {
+      "name": "MAVK",
+      "psi": 0.99,
+      "cvar": 0.02,
+      "theta_hat": 0.9,
+      "pole": 1
+    },
+    {
+      "name": "DAQ",
+      "psi": 0.95,
+      "cvar": 0.08,
+      "theta_hat": 0.8,
+      "pole": 1
+    },
+    {
+      "name": "CSR4",
+      "psi": 0.92,
+      "cvar": 0.03,
+      "theta_hat": 0.85,
+      "pole": 1
+    }
+  ]
+}

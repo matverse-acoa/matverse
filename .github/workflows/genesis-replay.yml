@@ -1,0 +1,57 @@
+name: Genesis Replay
+
+on:
+  pull_request:
+    paths:
+      - "genesis_builder.py"
+      - "data/fixtures/genesis_synthetic.json"
+      - "data/genesis_manifest.json"
+      - "tests/test_genesis_builder.py"
+      - ".github/workflows/genesis-replay.yml"
+  push:
+    branches: [main]
+    paths:
+      - "genesis_builder.py"
+      - "data/fixtures/genesis_synthetic.json"
+      - "data/genesis_manifest.json"
+      - "tests/test_genesis_builder.py"
+      - ".github/workflows/genesis-replay.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Rebuild historical synthetic fixture
+        run: |
+          python genesis_builder.py \
+            --input data/fixtures/genesis_synthetic.json \
+            --output /tmp/genesis_manifest.json \
+            --timestamp 2026-04-08T13:21:54.739841+00:00
+      - name: Verify rebuilt manifest
+        run: python genesis_builder.py --output /tmp/genesis_manifest.json --verify-only
+      - name: Confirm retained Merkle root
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path("/tmp/genesis_manifest.json").read_text(encoding="utf-8"))
+          expected = "87431dea7addb8a7aa0cfe6774739a98f3cd019313c2ef56e2722006f03d56fb"
+          actual = manifest["merkle_root"]
+          if actual != expected:
+              raise SystemExit(f"Merkle root mismatch: expected={expected} actual={actual}")
+          if manifest["dataset_class"] != "SYNTHETIC_FIXTURE":
+              raise SystemExit("dataset_class must remain SYNTHETIC_FIXTURE")
+          if manifest["claim_scope"] != "LOCAL_DETERMINISTIC_DEMONSTRATION_ONLY":
+              raise SystemExit("claim_scope exceeds the fixture evidence")
+          print(f"PASS: root={actual}")
