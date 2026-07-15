@@ -1,0 +1,134 @@
+schema_version: "1.0.0"
+as_of: "2026-07-15"
+default_state: HOLD
+source_of_truth: matverse-acoa/matverse
+
+rules:
+  new_top_level_repository: BLOCK_DURING_FREEZE
+  new_acronym_or_framework: INCUBATOR_ONLY
+  direct_main_push: BLOCK
+  unsupported_restricted_claim: BLOCK
+  missing_tests: HOLD
+  missing_unique_function: ARCHIVE_CANDIDATE
+
+canonical:
+  - repository: matverse-acoa/core
+    organ: CONSTITUTION
+    function: invariants, normative definitions, critical lenses and governance primitives
+    maturity: HOLD_CURRENT_REVERIFICATION
+    priority: P0
+
+  - repository: matverse-acoa/Cassandra
+    organ: CONTROL_PLANE
+    function: policy orchestration, administrative context and controlled agent coordination
+    maturity: SPECIFIED_PARTIAL
+    priority: P0
+
+  - repository: matverse-acoa/Gate
+    organ: DECISION_GATE
+    function: authorization, blocking and escalation before externally effective action
+    maturity: HOLD_CURRENT_REVERIFICATION
+    priority: P0
+
+  - repository: matverse-acoa/Organismo
+    organ: RUNTIME
+    function: state transition, execution, recovery and organism lifecycle
+    maturity: HOLD_CURRENT_REVERIFICATION
+    priority: P0
+
+  - repository: matverse-acoa/matverse
+    organ: CONTROL_REGISTRY
+    function: constitutional index, portfolio registry, claim status and cross-repository governance
+    maturity: EXECUTABLE_HISTORY_WITH_CLAIM_DEBT
+    priority: P0
+
+  - repository: matverse-acoa/mvo-test-results
+    organ: EVIDENCE_STORE
+    function: retained test outputs, manifests and reproducibility artifacts
+    maturity: HOLD_CURRENT_REVERIFICATION
+    priority: P0
+
+  - repository: matverse-acoa/papers
+    organ: SCIENTIFIC_LAYER
+    function: methods, formalization, manuscripts and publishable evidence
+    maturity: SPECIFIED_WITH_RUNTIME_OVERLAP
+    priority: P1
+
+  - repository: matverse-acoa/QEX
+    organ: LABORATORY
+    function: hypotheses, exploratory experiments and frontier research
+    maturity: CONCEPT_OR_SPECIFIED
+    priority: P2
+
+  - repository: matverse-acoa/CUBE
+    organ: EXPERIENCE_SURFACE
+    function: human interaction and read-only projection of governed state
+    maturity: DRAFT_BOOTSTRAP
+    priority: P2
+
+  - repository: Symbios-Matverse/matversechain-scan
+    organ: OBSERVABILITY_SURFACE
+    function: public or operator-facing inspection of recorded state and proofs
+    maturity: HOLD_CURRENT_REVERIFICATION
+    priority: P1
+
+supporting:
+  - repository: MatVerse-py/mem-nano-bit
+    function: causal memory primitive
+    disposition: CONSOLIDATE_INTERFACE
+
+  - repository: MatVerse-py/mnbs-seed
+    function: memory seed and genesis artifacts
+    disposition: CONSOLIDATE_INTERFACE
+
+  - repository: MatVerse-py/matverse-u-verifier
+    function: verification and replay surface
+    disposition: P0_DEPENDENCY
+
+  - repository: MatVerse-py/matverse-u-network
+    function: private network and sovereign transport experiments
+    disposition: P1_AFTER_GOLDEN_PATH
+
+  - repository: MatVerse-py/infra-root
+    function: infrastructure seed and official-legacy staging
+    disposition: PRIVATE_INFRA_SUPPORT
+
+  - repository: MatVerse-py/matverse-mcp-server
+    function: tool and connector interface
+    disposition: P1_AFTER_CONTROL_PLANE
+
+  - repository: MatVerse-U/MatVerse-U-OpenBox
+    function: operator visibility and interaction
+    disposition: UI_DEPENDENCY_REVIEW
+
+incubator:
+  policy: no canonical authority, production claim or cross-repository mandate
+  examples:
+    - matverse-acoa/matverse_ouroboros
+    - matverse-acoa/matverse-v5-sovereign
+    - matverse-acoa/svca-inescapavel
+    - MatVerse-Hub/IQG
+    - MatVerse-Hub/argos-media-integrity
+    - MatVerse-Hub/argos-admin-console
+    - MatVerse-py/urano-os
+    - MatVerse-py/urano-digital-life-contract
+
+archive_candidates:
+  rule: archive only after dependency and unique-function audit
+  known_historical:
+    - MatVerse-Hub/SymbiOS
+    - MatVerse-Hub/Prime
+    - MatVerse-Hub/Superkernel
+    - MatVerse-py/organismo
+    - MatVerse-py/Pose
+    - MatVerse-py/SuperKernel-6.0
+
+admission_gate:
+  required:
+    - unique_function
+    - named_owner
+    - declared_interfaces
+    - dependency_map
+    - executable_test
+    - rollback_or_archive_plan
+    - evidence_bound_maturity
